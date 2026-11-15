@@ -54,6 +54,7 @@ services:
     command: ["celery", "-A", "src.worker.app", "worker", "--loglevel=info", "--concurrency=1", "--hostname=worker@%h"]
     environment: *backend-env
     volumes: ["artifacts:/artifacts"]
+    mem_limit: 512m
     depends_on:
       db: {condition: service_healthy}
       redis: {condition: service_healthy}

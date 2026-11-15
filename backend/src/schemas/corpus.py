@@ -7,10 +7,16 @@ class CorpusInput(BaseModel):
  name:str=Field(min_length=1,max_length=100)
  filename:str=Field(min_length=1,max_length=160)
  description:str=Field(default='',max_length=500)
- documents:list[DocumentInput]=Field(min_length=5,max_length=1000)
+ documents:list[DocumentInput]=Field(default_factory=list,max_length=1000)
  @model_validator(mode='after')
  def unique_docs(self):
   if len({d.reference for d in self.documents})!=len(self.documents):raise ValueError('文档reference不可重复')
+  return self
+class BatchInput(BaseModel):
+ documents:list[DocumentInput]=Field(min_length=1,max_length=1000)
+ @model_validator(mode='after')
+ def unique_docs(self):
+  if len({d.reference for d in self.documents})!=len(self.documents):raise ValueError('批次内reference不可重复')
   return self
 class DocumentPatch(BaseModel):
  title:str=Field(min_length=1,max_length=120)

@@ -6,6 +6,6 @@ class TokenDocument(Base):
  __table_args__=(UniqueConstraint('corpus_id','reference'),)
  id:Mapped[int]=mapped_column(primary_key=True)
  corpus_id:Mapped[int]=mapped_column(ForeignKey('corpora.id'))
- reference:Mapped[str]=mapped_column(String(80))
+ reference:Mapped[str]=mapped_column(String(80).with_variant(String(80,collation='utf8mb4_bin'),'mysql'))
  title:Mapped[str]=mapped_column(String(120))
  tokens_text:Mapped[str]=mapped_column(Text)

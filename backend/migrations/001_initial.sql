@@ -1,5 +1,10 @@
--- metadata initializes corpora, token_documents, topic_runs, topic_profiles,
--- editorial_notes and users/audit. Natural keys corpus.name,
--- (corpus_id,reference), (run_id,topic_index). TopicProfile.mean_similarity
--- uses MySQL DOUBLE; complete matrices/word weights are JSON doubles.
--- Plan production schema migrations explicitly.
+-- metadata initializes corpora, token_documents, topic_runs, run_documents,
+-- topic_profiles, editorial_notes and users/audit. Natural keys corpus.name,
+-- (corpus_id,reference), (run_id,topic_index). token_documents.reference uses
+-- utf8mb4_bin on MySQL so database ordering matches Python codepoint order for
+-- streaming full-corpus statistics. run_documents stores per-document
+-- per-initialization activations and exclusion reasons, paged by
+-- (run_id,reference); it is written only after the whole analysis succeeds and
+-- deleted wholesale when a run fails, so a failed run never shows half a topic
+-- book. TopicProfile.mean_similarity uses MySQL DOUBLE; word weights are JSON
+-- doubles. Plan production schema migrations explicitly.
